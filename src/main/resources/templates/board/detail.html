@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content">
+  <div class="container-md">
+    <h1>[[${boardDTO.bno}]]</h1>
+    <hr>
+        <form action="/board/modify" method="post" id="modForm" class="mb-3">
+          <hr>
+          <input type="hidden" id="n" name="bno" th:value="${boardDTO.bno}">
+          <div class="mb-3">
+            <label for="regDate" class="form-label">작성일시 : </label>
+            <input type="text" class="form-control" name="regDate" id="regDate" th:value="${boardDTO.registerAt }" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="title" class="form-label">title</label>
+            <input type="text" class="form-control" name="title" id="title" th:value="${boardDTO.title }" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="writer" class="form-label">writer</label>
+            <input type="text" class="form-control" id="writer" name="writer" th:value="${boardDTO.writer }" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">content</label>
+            <textarea class="form-control" id="content" rows="3" name="content" readonly>[[${boardDTO.content }]]</textarea>
+          </div>
+        </form>
+      <button type="button" id="listBtn" class="btn btn-outline-primary">목록</button>
+      <!-- detail에서 modify 상태로 변환하기 위한 버튼 -->
+      <button type="button" id="modBtn" class="btn btn-outline-warning">수정</button>
+      <a th:href="@{/board/delete(bno=${boardDTO.bno})}">
+        <button type="button" id="delBtn" class="btn btn-outline-danger" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+      </a>
+  </div>
+  <script th:src="@{/js/boardDetail.js}"></script>
+</div>

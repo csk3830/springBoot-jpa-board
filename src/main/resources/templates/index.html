@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content" class="main">
+    <style>
+        .main .container-md {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .main h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8em; /* 폰트 크기 줄임 */
+            letter-spacing: -0.5px; /* 자간 좁힘 */
+        }
+        .main p {
+            font-size: 1em; /* 폰트 크기 줄임 */
+            line-height: 1.5;
+            margin-bottom: 20px;
+            letter-spacing: -0.3px; /* 자간 좁힘 */
+        }
+        .main ol {
+            padding-left: 20px;
+        }
+        .main li {
+            font-size: 1em; /* 폰트 크기 줄임 */
+            line-height: 1.6;
+            margin-bottom: 15px;
+            letter-spacing: -0.3px; /* 자간 좁힘 */
+        }
+        .main li strong {
+            color: #4CAF50;
+        }
+        .main .container-md p, .container-md li {
+            color: #555;
+        }
+        .main .container-md ol li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 5px solid #4CAF50;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+
+    <div class="container-md">
+        <h1>게시판 이용 안내</h1>
+        <p>안녕하세요! SooKyung의 게시판에 오신 것을 환영합니다.<br>
+        이곳은 자유롭게 의견을 나누고, 다양한 정보를 공유할 수 있는 공간입니다. 게시판을 원활하게 이용하기 위해 아래의 이용 규칙을 반드시 지켜주시기 바랍니다.</p>
+
+        <ol>
+            <li><strong>기본 예절 지키기</strong><br>상대방을 비방하거나 불쾌감을 주는 언행은 삼가해 주세요. 타인을 공격하거나 비하하는 게시물은 삭제될 수 있으며, 반복적인 위반자는 게시판 이용에 제한을 받을 수 있습니다.</li>
+            <li><strong>개인정보 보호</strong><br>게시물에 개인정보를 포함하지 말아 주세요. 다른 사람의 개인정보를 유출하거나 공개하는 것은 법적 문제를 일으킬 수 있습니다.</li>
+            <li><strong>광고 및 상업적 목적의 글 금지</strong><br>상업적인 광고나 홍보글은 게시판의 취지에 맞지 않으므로 게시할 수 없습니다. 이와 관련된 글은 관리자에 의해 삭제될 수 있습니다.</li>
+            <li><strong>불법적인 내용 금지</strong><br>불법적인 콘텐츠, 악성 코드, 음란물 등의 게시를 금지합니다. 이러한 글은 즉시 삭제되며, 관련 법률에 의한 처벌을 받을 수 있습니다.</li>
+            <li><strong>댓글 작성 시 주의사항</strong><br>불필요한 논란을 일으키거나 악성 댓글을 달지 않도록 주의해 주세요.</li>
+            <li><strong>게시물 신고 기능 활용</strong><br>게시물이나 댓글에서 규칙을 위반한 내용을 발견하셨다면, 게시물 옆에 있는 "신고" 버튼을 통해 신고해 주세요. 관리자가 신속하게 처리하도록 하겠습니다.</li>
+            <li><strong>저작권 및 출처 표기</strong><br>다른 사람의 콘텐츠를 사용할 때는 반드시 출처를 명시해 주세요. 무단으로 타인의 콘텐츠를 사용하면 법적 문제가 발생할 수 있습니다.</li>
+        </ol>
+    </div>
+
+</div>
