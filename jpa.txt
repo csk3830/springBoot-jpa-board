@@ -2,3 +2,10 @@ JPA
 
 - log4jdbc 1.1.16
 - tika 2.4.1 / thumbnailator 0.4.17
+
+- comment DTO
+- cno, bno, writer, content, regAt, modAt
+
+- comment Entity
+- cno, bno, writer, content 상속
+

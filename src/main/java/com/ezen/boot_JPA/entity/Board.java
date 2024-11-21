@@ -23,7 +23,7 @@ public class Board extends TimeBase{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increments 생성
-    private Long bno;
+    private long bno;
 
     @Column(length = 100, nullable = false)
     private String title;

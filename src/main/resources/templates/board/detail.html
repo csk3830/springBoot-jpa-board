@@ -12,8 +12,8 @@
           <hr>
           <input type="hidden" id="n" name="bno" th:value="${boardDTO.bno}">
           <div class="mb-3">
-            <label for="regDate" class="form-label">작성일시 : </label>
-            <input type="text" class="form-control" name="regDate" id="regDate" th:value="${boardDTO.registerAt }" readonly>
+            <label for="registerAt" class="form-label">작성일시 : </label>
+            <input type="text" class="form-control" name="registerAt" id="registerAt" th:value="${boardDTO.registerAt }" readonly>
           </div>
           <div class="mb-3">
             <label for="title" class="form-label">title</label>
@@ -28,12 +28,63 @@
             <textarea class="form-control" id="content" rows="3" name="content" readonly>[[${boardDTO.content }]]</textarea>
           </div>
         </form>
-      <button type="button" id="listBtn" class="btn btn-outline-primary">목록</button>
+      <button type="button" id="listBtn" class="btn btn-primary">목록</button>
       <!-- detail에서 modify 상태로 변환하기 위한 버튼 -->
-      <button type="button" id="modBtn" class="btn btn-outline-warning">수정</button>
+      <button type="button" id="modBtn" class="btn btn-warning">수정</button>
       <a th:href="@{/board/delete(bno=${boardDTO.bno})}">
-        <button type="button" id="delBtn" class="btn btn-outline-danger" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+        <button type="button" id="delBtn" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
       </a>
+
+    <!-- /* comment line */ -->
+    <!--/* comment post line */-->
+    <div class="input-group mb-3 mt-3">
+      <span class="input-group-text" id="cmtWriter">Writer</span>
+      <input type="text" id="cmtText" class="form-control" placeholder="Add Comment..." aria-label="Username" aria-describedby="basic-addon1">
+      <button type="button" id="cmtAddBtn" class="btn btn-secondary">post</button>
+    </div>
+    <!--/* comment spread */-->
+    <ul class="list-group list-group-flush" id="cmtListArea">
+      <li class="list-group-item">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">writer</div>
+          Content
+        </div>
+        <span class="badge text-bg-primary rounded-pill">regDate</span>
+      </li>
+    </ul>
+    <!--/* 더보기 */-->
+    <div class="mt-3">
+      <button type="button" id="moreBtn" data-page="1" class="btn btn-dark" style="visibility:hidden">MORE + </button>
+    </div>
+
+    <!--/* modal */-->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="cmtWriterMod">Anonymous</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <input type="text" class="form-control" id="cmtTextMod">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" id="cmtModBtn" class="btn btn-primary">changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
+  <script th:inline="javascript">
+    let bnoVal = [[${boardDTO.bno}]]
+    console.log(bnoVal);
+  </script>
   <script th:src="@{/js/boardDetail.js}"></script>
+  <script th:src="@{/js/boardComment.js}"></script>
+
+  <script>
+    spreadCommentList(bnoVal);
+  </script>
 </div>
