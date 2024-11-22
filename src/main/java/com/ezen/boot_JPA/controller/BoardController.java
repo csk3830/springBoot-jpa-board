@@ -1,19 +1,22 @@
 package com.ezen.boot_JPA.controller;
 
 import com.ezen.boot_JPA.dto.BoardDTO;
+import com.ezen.boot_JPA.dto.BoardFileDTO;
+import com.ezen.boot_JPA.dto.FileDTO;
 import com.ezen.boot_JPA.dto.PagingVO;
+import com.ezen.boot_JPA.handler.FileHandler;
+import com.ezen.boot_JPA.handler.FileRemoveHandler;
 import com.ezen.boot_JPA.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -22,18 +25,31 @@ import java.util.List;
 @Slf4j
 public class BoardController {
     private final BoardService boardService;
+    private final FileHandler fileHandler;
 
     @GetMapping("/register")
     public void register() {}
 
-    @PostMapping("/register")
+    // 파일첨부 없이
+    /*@PostMapping("/register")
     public String register(BoardDTO boardDTO) {
         log.info(">>> boardDTO >> {}", boardDTO);
         // insert, update, delete   => return 1 row
         // jpa insert, update, delete => return id
         Long bno = boardService.insert(boardDTO);
         log.info(">>> insert >> {}", bno > 0 ? "OK" : "Fail");
-        return "/index";
+        return "redirect:/board/list";
+    }*/
+
+    @PostMapping("/register")
+    public String register(BoardDTO boardDTO, @RequestParam(name = "files", required = false) MultipartFile[] files) {
+        List<FileDTO> fileList = null;
+        if(files != null && files[0].getSize() > 0){
+            // 파일 핸들러 작업
+            fileList = fileHandler.uploadFiles(files);
+        }
+        long bno = boardService.insert(new BoardFileDTO(boardDTO, fileList));
+        return "redirect:/board/list";
     }
 
     /*@GetMapping("/list")
@@ -67,13 +83,19 @@ public class BoardController {
 
     @GetMapping("/detail")
     public void detail(Model model, @RequestParam("bno") Long bno) {
-        BoardDTO boardDTO = boardService.getDetail(bno);
-        model.addAttribute("boardDTO", boardDTO);
+        //BoardDTO boardDTO = boardService.getDetail(bno);
+        BoardFileDTO boardFileDTO = boardService.getDetail(bno);
+        model.addAttribute("boardFileDTO", boardFileDTO);
     }
 
     @PostMapping("/modify")
-    public String modify(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
-        Long bno = boardService.modify(boardDTO);
+    public String modify(BoardDTO boardDTO, @RequestParam(name = "files", required = false) MultipartFile[] files, RedirectAttributes redirectAttributes) {
+        List<FileDTO> fileList = null;
+        if(files != null && files[0].getSize() > 0){
+            // 파일 핸들러 작업
+            fileList = fileHandler.uploadFiles(files);
+        }
+        Long bno = boardService.modify(new BoardFileDTO(boardDTO, fileList));
         redirectAttributes.addAttribute("bno", boardDTO.getBno());
         return "redirect:/board/detail";
     }
@@ -82,5 +104,16 @@ public class BoardController {
     public String delete(@RequestParam("bno") Long bno) {
         boardService.delete(bno);
         return "redirect:/board/list";
+    }
+
+    @ResponseBody
+    @DeleteMapping("/file/{uuid}")
+    public String fileRemove(@PathVariable("uuid") String uuid){
+        FileDTO fileDTO = boardService.getFile(uuid);
+        long bno = boardService.fileRemove(uuid);
+
+        FileRemoveHandler fileRemoveHandler = new FileRemoveHandler();
+        boolean isDel = fileRemoveHandler.deleteFile(fileDTO);
+        return (bno > 0 && isDel) ?  "1" : "0" ;
     }
 }
