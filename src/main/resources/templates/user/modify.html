@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content">
+  <div class="container-md">
+    <h1>User Modify Page</h1>
+    <hr>
+    <form action="/user/modify" method="post">
+      <div class="col">
+        <div class="card border-dark mb-3" style="max-width: 540px;" th:with="auth=${#authentication.getPrincipal()}">
+          <div class="row g-0">
+            <div class="col-md-4">
+
+              <!--<img th:src="@{|/image/${userDTO.authList.?[auth=='ROLE_ADMIN']).size() > 0 ? 'admin.png' : 'people.png'}|}" class="img-fluid rounded-start" alt="...">-->
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <input type="hidden" name="email" id="email" th:value="${userDTO.email }">
+                <h5 class="card-title">
+                  <input type="text" name="nickName" class="form-control" th:value="${userDTO.nickName }">
+                  <input type="text" name="pwd" class="form-control" placeholder="새 비밀번호">
+                </h5>
+                <p class="card-text">[[${userDTO.email }]] ([[${userDTO.registerAt }]]) </p>
+                <p class="card-text"><small class="text-body-secondary">Last login [[${userDTO.lastLogin }]] ago</small></p>
+                <span class="badge rounded-pill text-bg-success" th:each="auths:${userDTO.authList}">[[${auths.auth }]]</span>
+                <button type="submit" class="btn btn-primary btn-sm">수정</button>
+                <a href="/user/remove"><button type="button" class="btn btn-danger btn-sm" onclick="return confirm('정말 탈퇴하시겠습니까?')">회원탈퇴</button></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

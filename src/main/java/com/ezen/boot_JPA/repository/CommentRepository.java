@@ -9,6 +9,6 @@ import java.util.List;
 
 /* JpaRepository<entity name, id class> */
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByBno(long bno);
+    //List<Comment> findByBno(long bno);
     Page<Comment> findByBno(long bno, Pageable pageable);
 }
