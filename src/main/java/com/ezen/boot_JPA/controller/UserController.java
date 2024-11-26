@@ -65,6 +65,7 @@ public class UserController {
 
     @GetMapping("/remove")
     public String remove(@RequestParam("email") String email){
-        return null;
+        userService.remove(email);
+        return "redirect:/user/logout";
     }
 }

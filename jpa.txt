@@ -9,3 +9,27 @@ JPA
 - comment Entity
 - cno, bno, writer, content 상속
 
+- queryDSL
+querydsl-jpa
+querydsl-apt
+
+--24.11.26. 각 게시글 당 조회수, 댓글 수, 파일 수 추가 
+
+ALTER TABLE board
+ADD COLUMN comment_count INT DEFAULT 0,
+ADD COLUMN views INT DEFAULT 0,
+ADD COLUMN file_count INT DEFAULT 0;
+
+UPDATE board b
+SET comment_count = (
+    SELECT COUNT(*)
+    FROM comment c
+    WHERE c.bno = b.bno
+);
+
+UPDATE board b
+SET file_count = (
+    SELECT COUNT(*)
+    FROM file f
+    WHERE f.bno = b.bno
+);

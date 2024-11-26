@@ -2,6 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout/layout}">
 
 <div layout:fragment="content">
@@ -63,15 +64,15 @@
 
       <button type="button" id="listBtn" class="btn btn-primary">목록</button>
       <!-- detail에서 modify 상태로 변환하기 위한 버튼 -->
-      <button type="button" id="modBtn" class="btn btn-warning">수정</button>
-      <a th:href="@{/board/delete(bno=${boardDTO.bno})}">
+      <button type="button" id="modBtn" class="btn btn-warning" sec:authorize="isAuthenticated()" th:if="${#authentication.getPrincipal().userDTO.nickName == boardDTO.writer}">수정</button>
+      <a th:href="@{/board/delete(bno=${boardDTO.bno})}" sec:authorize="isAuthenticated()" th:if="${#authentication.getPrincipal().userDTO.nickName == boardDTO.writer}">
         <button type="button" id="delBtn" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
       </a>
       </form>
 
     <!-- /* comment line */ -->
     <!--/* comment post line */-->
-    <div class="input-group mb-3 mt-3">
+    <div class="input-group mb-3 mt-3" sec:authorize="isAuthenticated()">
       <span class="input-group-text" id="cmtWriter" th:text="${#authentication.getPrincipal().userDTO.nickName}" readonly>Anonymous</span>
       <input type="text" id="cmtText" class="form-control" placeholder="Add Comment..." aria-label="Username" aria-describedby="basic-addon1">
       <button type="button" id="cmtAddBtn" class="btn btn-secondary">post</button>
@@ -92,7 +93,7 @@
     </div>
 
     <!--/* modal */-->
-    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" sec:authorize="isAuthenticated()">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -103,8 +104,8 @@
             <input type="text" class="form-control" id="cmtTextMod">
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" id="cmtModBtn" class="btn btn-primary">changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            <button type="button" id="cmtModBtn" class="btn btn-primary">수정</button>
           </div>
         </div>
       </div>
@@ -114,6 +115,8 @@
   <script th:inline="javascript">
     let bnoVal = [[${boardFileDTO.boardDTO.bno}]]
     console.log(bnoVal);
+    let nickName =  /*[[${#authentication.getPrincipal().userDTO.nickName}]]*/ '';
+    console.log(nickName)
   </script>
   <script th:src="@{/js/boardDetail.js}"></script>
   <script th:src="@{/js/boardComment.js}"></script>

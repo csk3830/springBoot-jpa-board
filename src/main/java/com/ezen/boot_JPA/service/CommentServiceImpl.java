@@ -1,7 +1,9 @@
 package com.ezen.boot_JPA.service;
 
 import com.ezen.boot_JPA.dto.CommentDTO;
+import com.ezen.boot_JPA.entity.Board;
 import com.ezen.boot_JPA.entity.Comment;
+import com.ezen.boot_JPA.repository.BoardRepository;
 import com.ezen.boot_JPA.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +20,25 @@ import java.util.Optional;
 @Slf4j
 public class CommentServiceImpl implements CommentService{
     private final CommentRepository commentRepository;
+    private final BoardRepository boardRepository;
 
     @Override
     public long post(CommentDTO commentDTO) {
-        return commentRepository.save(convertDtoToEntity(commentDTO)).getCno();
+        Comment savedComment = commentRepository.save(convertDtoToEntity(commentDTO));
+
+        long bno = savedComment.getBno();
+        Optional<Board> boardOptional = boardRepository.findById(bno);
+
+        if (boardOptional.isPresent()) {
+            Board board = boardOptional.get();
+            int updatedCount = board.getCommentCount() + 1;
+
+            if (updatedCount >= 0) {
+                board.setCommentCount(updatedCount);
+                boardRepository.save(board);
+            }
+        }
+        return savedComment.getCno();
     }
 
     @Override
@@ -45,6 +62,27 @@ public class CommentServiceImpl implements CommentService{
         commentRepository.deleteById(cno);
         Optional<Comment> optionalComment = commentRepository.findById(cno);
         return optionalComment.map(Comment::getCno).orElse(0L);
+
+        /*commentRepository.deleteById(cno);
+
+        Optional<Comment> optionalComment = commentRepository.findById(cno);
+        if (optionalComment.isPresent()) {
+            Comment comment = optionalComment.get();
+            long bno = comment.getBno();
+
+            Optional<Board> boardOptional = boardRepository.findById(bno);
+            if (boardOptional.isPresent()) {
+                Board board = boardOptional.get();
+                int updatedCount = board.getCommentCount() - 1;
+
+                if (updatedCount >= 0) {
+                    board.setCommentCount(updatedCount);
+                    boardRepository.save(board);
+                }
+            }
+        }
+
+        return cno;*/
     }
 
     @Override

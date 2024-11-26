@@ -16,5 +16,8 @@ public class BoardDTO {
     private String writer;
     private String content;
     private LocalDateTime registerAt, modifyAt;
+    private int commentCount;
+    private int views;
+    private int fileCount;
 
 }

@@ -59,7 +59,7 @@ public class BoardController {
         model.addAttribute("list", list);
     }*/
 
-    @GetMapping("/list")
+    /*@GetMapping("/list")
     public void list(Model model, @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo) {
         // 화면에서 들어오는 pageNo = 1 / 0으로 처리가 돼야 한다는 의미
         // 화면에서 들어오는 pageNo = 2 / 1로 처리가 돼야 한다는 의미
@@ -79,11 +79,24 @@ public class BoardController {
         log.info(">>> pagingVO >> {}", pagingVO.toString());
         model.addAttribute("list", list);
         model.addAttribute("pagingVO", pagingVO);
+    }*/
+
+    @GetMapping("/list")
+    public void list(Model model, 
+                     @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+                     @RequestParam(value = "type", required = false) String type,
+                     @RequestParam(value = "keyword", required = false) String keyword) {
+        pageNo = (pageNo == 0 ? 0 : pageNo - 1);
+        Page<BoardDTO> list = boardService.getList(pageNo, type, keyword); // type, keyword 추가하여 서비스임플로 보내기
+        PagingVO pagingVO = new PagingVO(list, pageNo, type, keyword);
+        model.addAttribute("list", list);
+        model.addAttribute("pagingVO", pagingVO);
     }
 
     @GetMapping("/detail")
     public void detail(Model model, @RequestParam("bno") Long bno) {
         //BoardDTO boardDTO = boardService.getDetail(bno);
+        boardService.viewsUp(bno);
         BoardFileDTO boardFileDTO = boardService.getDetail(bno);
         model.addAttribute("boardFileDTO", boardFileDTO);
     }

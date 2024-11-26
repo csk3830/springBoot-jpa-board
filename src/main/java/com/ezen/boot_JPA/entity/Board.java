@@ -37,4 +37,8 @@ public class Board extends TimeBase{
     // 생성시 초기화 값을 지정 : 객체가 생길 때 객체의 기본값 생성
     // @Builder.Default
     // private int point = 0;
+
+    private int commentCount;
+    private int views;
+    private int fileCount;
 }

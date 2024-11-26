@@ -5,7 +5,6 @@ import com.ezen.boot_JPA.dto.UserDTO;
 import com.ezen.boot_JPA.entity.AuthUser;
 import com.ezen.boot_JPA.entity.User;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserService {
@@ -60,4 +59,6 @@ public interface UserService {
     List<UserDTO> getList();
 
     String modify(UserDTO userDTO);
+
+    void remove(String email);
 }

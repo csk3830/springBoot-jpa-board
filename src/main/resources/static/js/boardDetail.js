@@ -3,32 +3,35 @@ console.log('boardDetail.js in');
 document.getElementById('listBtn').addEventListener('click',()=>{
     location.href = "/board/list";
 });
-document.getElementById('modBtn').addEventListener('click', ()=>{
-    document.getElementById('title').readOnly=false;
-    document.getElementById('content').readOnly=false;
-    document.getElementById('writer').readOnly=false;
 
-    // 버튼 생성
-    let modBtn = document.createElement("button");
-    modBtn.setAttribute("type", "submit");
-    modBtn.setAttribute("id", "regBtn");
-    modBtn.classList.add("btn", "btn-outline-warning");
-    modBtn.innerText="저장";
+if(document.getElementById('modBtn')){
+    document.getElementById('modBtn').addEventListener('click', ()=>{
+        document.getElementById('title').readOnly=false;
+        document.getElementById('content').readOnly=false;
+        document.getElementById('writer').readOnly=false;
 
-    // 추가
-    document.getElementById("modForm").appendChild(modBtn);
-    document.getElementById("modBtn").remove();
-    document.getElementById("delBtn").remove();
+        // 버튼 생성
+        let modBtn = document.createElement("button");
+        modBtn.setAttribute("type", "submit");
+        modBtn.setAttribute("id", "regBtn");
+        modBtn.classList.add("btn", "btn-outline-warning");
+        modBtn.innerText="저장";
 
-    // file-x   fileUpload 버튼 disabled = false
-    document.getElementById('trigger').style.display='inline-block';
+        // 추가
+        document.getElementById("modForm").appendChild(modBtn);
+        document.getElementById("modBtn").remove();
+        document.getElementById("delBtn").remove();
 
-    let fileDelBtn = document.querySelectorAll(".file-x");
-    console.log(fileDelBtn);
-    for(let delBtn of fileDelBtn){
-        delBtn.style.display = 'inline-block';
-    }
-});
+        // file-x   fileUpload 버튼 disabled = false
+        document.getElementById('trigger').style.display='inline-block';
+
+        let fileDelBtn = document.querySelectorAll(".file-x");
+        console.log(fileDelBtn);
+        for(let delBtn of fileDelBtn){
+            delBtn.style.display = 'inline-block';
+        }
+    });
+}
 
 document.addEventListener('click', (e)=>{
     if(e.target.classList.contains('file-x')){

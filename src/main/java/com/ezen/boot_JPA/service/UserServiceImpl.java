@@ -97,5 +97,18 @@ public class UserServiceImpl implements UserService{
         return null;
     }
 
+    @Override
+    public void remove(String email) {
+        Optional<User> optional = userRepository.findById(email);
+        if(optional.isPresent()){
+            User user = optional.get();
+            List<AuthUser> authUserList = authUserRepository.findByEmail(user.getEmail());
+            for(AuthUser authUser : authUserList){
+                authUserRepository.deleteById(authUser.getId());
+            }
+        }
+        userRepository.deleteById(email);
+    }
+
 
 }

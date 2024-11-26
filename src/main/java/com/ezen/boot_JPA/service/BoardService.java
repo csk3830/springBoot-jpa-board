@@ -26,6 +26,9 @@ public interface BoardService {
                 .title(boardDTO.getTitle())
                 .writer(boardDTO.getWriter())
                 .content(boardDTO.getContent())
+                .commentCount(boardDTO.getCommentCount())
+                .views(boardDTO.getViews())
+                .fileCount(boardDTO.getFileCount())
                 .build();
 
     }
@@ -38,6 +41,9 @@ public interface BoardService {
                 .title(board.getTitle())
                 .writer(board.getWriter())
                 .content(board.getContent())
+                .commentCount(board.getCommentCount())
+                .views(board.getViews())
+                .fileCount(board.getFileCount())
                 .registerAt(board.getRegisterAt())
                 .modifyAt(board.getModifyAt())
                 .build();
@@ -79,11 +85,13 @@ public interface BoardService {
 
     void delete(Long bno);
 
-    Page<BoardDTO> getList(int pageNo);
+    Page<BoardDTO> getList(int pageNo, String type, String keyword);
 
     long fileRemove(String uuid);
 
     Long modify(BoardFileDTO boardFileDTO);
 
     FileDTO getFile(String uuid);
+
+    void viewsUp(Long bno);
 }

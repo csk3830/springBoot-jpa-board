@@ -1,26 +1,29 @@
 console.log('boardComment.js in');
 console.log(bnoVal);
-document.getElementById('cmtAddBtn').addEventListener('click',()=>{
-    const cmtWriter = document.getElementById('cmtWriter');
-    const cmtText = document.getElementById('cmtText');
-    if(cmtText.value == null || cmtText.value===""){
-        alert("댓글을 입력해 주세요.");
-    }
-    let cmtData={
-        bno : bnoVal,
-        writer : cmtWriter.innerText,
-        content: cmtText.value
-    }
 
-    PostCommentToServer(cmtData).then(result =>{
-        if(result === '1'){
-            alert("댓글 등록 성공");
+if(document.getElementById('cmtAddBtn')){
+    document.getElementById('cmtAddBtn').addEventListener('click',()=>{
+        const cmtWriter = document.getElementById('cmtWriter');
+        const cmtText = document.getElementById('cmtText');
+        if(cmtText.value == null || cmtText.value===""){
+            alert("댓글을 입력해 주세요.");
         }
-        cmtText.value = "";
-        // 댓글 뿌리기 호출
-        spreadCommentList(bnoVal);
+        let cmtData={
+            bno : bnoVal,
+            writer : cmtWriter.innerText,
+            content: cmtText.value
+        }
+
+        PostCommentToServer(cmtData).then(result =>{
+            if(result === '1'){
+                alert("댓글 등록 성공");
+            }
+            cmtText.value = "";
+            // 댓글 뿌리기 호출
+            spreadCommentList(bnoVal);
+        })
     })
-})
+}
 
 function spreadCommentList(bno, page=1){
     getCommentListFromServer(bno, page).then(result=>{
@@ -37,8 +40,10 @@ function spreadCommentList(bno, page=1){
                 li += `${cvo.content}`;
                 li += `</div>`;
                 li += `<span class="badge text-bg-primary rounded-pill">${cvo.registerAt}</span>`;
-                li += `<button type="button" data-cno=${cvo.cno} class="btn btn-warning btn-sm mod" data-bs-toggle="modal" data-bs-target="#myModal">수정</button>`;
-                li += `<button type="button" data-cno=${cvo.cno} class="btn btn-danger btn-sm del">삭제</button>`;
+                if( nickName === cvo.writer ){
+                    li += `<button type="button" data-cno=${cvo.cno} class="btn btn-warning btn-sm mod" data-bs-toggle="modal" data-bs-target="#myModal">수정</button>`;
+                    li += `<button type="button" data-cno=${cvo.cno} class="btn btn-danger btn-sm del">삭제</button>`;
+                }
                 li += `</li>`;
                 ul.innerHTML += li;
             }
