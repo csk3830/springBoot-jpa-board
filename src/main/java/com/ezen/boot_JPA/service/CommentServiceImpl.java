@@ -59,16 +59,12 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public long remove(long cno) {
-        commentRepository.deleteById(cno);
         Optional<Comment> optionalComment = commentRepository.findById(cno);
-        return optionalComment.map(Comment::getCno).orElse(0L);
 
-        /*commentRepository.deleteById(cno);
-
-        Optional<Comment> optionalComment = commentRepository.findById(cno);
         if (optionalComment.isPresent()) {
             Comment comment = optionalComment.get();
             long bno = comment.getBno();
+            commentRepository.deleteById(cno);
 
             Optional<Board> boardOptional = boardRepository.findById(bno);
             if (boardOptional.isPresent()) {
@@ -80,9 +76,11 @@ public class CommentServiceImpl implements CommentService{
                     boardRepository.save(board);
                 }
             }
+            System.out.println("comment.getCno() ===============================================================" + comment.getCno());
+            return comment.getCno();
         }
 
-        return cno;*/
+        return 0L;
     }
 
     @Override

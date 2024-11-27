@@ -27,20 +27,56 @@
           <li class="nav-item" sec:authorize="isAnonymous()">
             <a class="nav-link" href="/user/login">로그인</a>
           </li>
-          <li class="nav-item" sec:authorize="isAuthenticated()">
-            <a class="nav-link" href="/user/logout">로그아웃</a>
-          </li>
           <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
             <a class="nav-link" href="/user/list">회원목록</a>
           </li>
           <li class="nav-item" sec:authorize="isAuthenticated()">
             <a class="nav-link" href="/user/modify">[[${#authentication.name}]] 회원정보수정</a>
           </li>
+          <li class="nav-item" sec:authorize="isAuthenticated()">
+            <a class="nav-link" href="/message/list">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+              </svg>
+            </a>
+          </li>
+          <li class="nav-item" sec:authorize="isAuthenticated()">
+            <a class="nav-link" href="/user/logout">로그아웃</a>
+          </li>
+          <div style="padding-left: 200px;" class="justify-content-end d-flex gap-2 align-items-center">
+            <img id="weather-icon-img" src="" alt="Weather icon" style="width: 40px; height: 40px;">
+            <li class="nav-item" id="weatherType">
+              날씨 정보 로딩 중...
+            </li>
+            <div id="currTime">
+                날짜 정보 로딩 중...
+            </div>
+          </div>
 
         </ul>
 
       </div>
     </div>
   </nav>
+  <script>
+    async function getWeatherData() {
+      const response = await fetch(
+              `https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=b578f56dfda7f642d5f6f2236ec61cd0&lang=kr&units=metric`
+      );
+      const data = await response.json();
+      console.log(data);
+      const currTemp = Math.round(data.main.temp * 10) / 10;
+      console.log(currTemp);
+      const weatherType = data.weather[0].description;
+      const weatherIconCode = data.weather[0].icon;
+      const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherIconCode}@2x.png`;
+      const currTime = new Date(data.dt * 1000).toLocaleString('ko-KR');
 
+      document.getElementById('weather-icon-img').src = weatherIconUrl;
+      document.getElementById('weatherType').innerHTML = `${weatherType}(${currTemp}°C)`
+      document.getElementById('currTime').innerHTML = `<span style="font-size: 12px;">${currTime}</span>`;
+    }
+
+    window.onload = getWeatherData;
+  </script>
 </div>

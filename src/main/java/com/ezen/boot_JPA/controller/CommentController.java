@@ -38,7 +38,7 @@ public class CommentController {
     @DeleteMapping("/remove/{cno}")
     public String remove(@PathVariable("cno") long cno){
         long isOk = commentService.remove(cno);
-        return isOk == 0 ? "1" : "0";
+        return isOk == 0 ? "0" : "1";
     }
 
     @PutMapping("/update")

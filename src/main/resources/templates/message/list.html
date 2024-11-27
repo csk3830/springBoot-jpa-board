@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content">
+  <div class="container-md">
+    <h1>Message list Page</h1>
+    <hr>
+    [[${#authentication.getPrincipal().userDTO.email}]]
+    <table class="table table-hover table-info zebra-striping">
+      <thead>
+      <tr>
+        <th scope="col">제목</th>
+        <th scope="col">보낸 사람</th>
+        <th scope="col">보낸 시각</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th scope="col">[ㅈㅉ] 당분간 접속 못해요. 할말 카톡.</th>
+        <th scope="col">신채경</th>
+        <th scope="col">2024-11-27</th>
+      </tr>
+      </tbody>
+    </table>
+    <a class="nav-link" href="/message/register">메세지 보내기</a>
+  </div>
+</div>

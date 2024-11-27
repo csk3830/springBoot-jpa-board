@@ -7,7 +7,6 @@ import com.ezen.boot_JPA.entity.Board;
 import com.ezen.boot_JPA.entity.File;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
 
 public interface BoardService {
     // 추상메서드만 가능한 인터페이스

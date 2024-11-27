@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content">
+    <div class="container-md">
+        <h1>메세지를 보내봅시다.</h1>
+        <hr>
+        <form action="/message/register" method="post">
+            <input type="hidden" name="writer" th:value="${#authentication.getPrincipal().userDTO.email}">
+            <div class="mb-3">
+                <label for="r" class="form-label">To</label>
+                <input type="text" class="form-control" name="receiver" id="r" placeholder="받는 사람의 이메일">
+            </div>
+            <div class="mb-3">
+                <label for="t" class="form-label">Title</label>
+                <input type="text" class="form-control" name="title" id="t" placeholder="제목을 입력해 주세요">
+            </div>
+            <div class="mb-3">
+                <label for="c" class="form-label">Content</label>
+                <textarea class="form-control" name="content" id="c" rows="3" cols="16"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-outline-secondary" id="regBtn">전송</button>
+        </form>
+    </div>
+</div>
