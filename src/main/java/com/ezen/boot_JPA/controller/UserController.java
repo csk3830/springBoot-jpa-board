@@ -42,6 +42,14 @@ public class UserController {
         /* 에러와 예외값을 담아 화면으로 전달 */
         model.addAttribute("error", error);
         model.addAttribute("exception", exception);
+
+        /* 카카오 로그인*/
+        String restApiKey = "ea9c0d226405dacbf737edffbc9299a5";
+        String redirectUri = "http://localhost:8089/user/kakao/callback";
+        String kakaoLoginPageUrl = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + restApiKey
+                + "&redirect_uri=" + redirectUri;
+
+        model.addAttribute("kakaoLoginPageUrl", kakaoLoginPageUrl);
     }
 
     @GetMapping("/list")
@@ -67,5 +75,11 @@ public class UserController {
     public String remove(@RequestParam("email") String email){
         userService.remove(email);
         return "redirect:/user/logout";
+    }
+
+    @GetMapping("/kakao/callback")
+    public String callback(@RequestParam("code") String code) {
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> callback code >>>>>>>>>>>>>>>>>> {}", code);
+        return code;
     }
 }

@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Builder
 public class MessageDTO {
     private long mno;
-    private String title;
     private String writer;
     private String content;
     private String receiver;

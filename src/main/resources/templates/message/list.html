@@ -6,25 +6,85 @@
 
 <div layout:fragment="content">
   <div class="container-md">
-    <h1>Message list Page</h1>
+    <h1>받은 메세지함</h1>
     <hr>
-    [[${#authentication.getPrincipal().userDTO.email}]]
+    <form action="/message/register" method="post">
+    <input type="hidden" name="writer" th:value="${#authentication.getPrincipal().userDTO.email}">
     <table class="table table-hover table-info zebra-striping">
       <thead>
       <tr>
-        <th scope="col">제목</th>
+        <th scope="col" style="width: 50%;">내용</th>
         <th scope="col">보낸 사람</th>
         <th scope="col">보낸 시각</th>
+        <th scope="col" style="width: 10%;"></th>
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <th scope="col">[ㅈㅉ] 당분간 접속 못해요. 할말 카톡.</th>
-        <th scope="col">신채경</th>
-        <th scope="col">2024-11-27</th>
+      <tr th:each="m : ${messageDTO}" class="message-row" th:attr="data-writer=${m.writer}">
+        <td th:text="${m.content}"></td>
+        <td th:text="${m.writer}"></td>
+        <td th:text="${m.registerAt}"></td>
+        <td>
+          <a class="btn btn-primary btn-sm" id="messageReply">답장</a>
+          <a th:href="@{/message/delete(mno=${m.mno})}" class="btn btn-danger btn-sm" id="messageDelete" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+        </td>
       </tr>
       </tbody>
     </table>
-    <a class="nav-link" href="/message/register">메세지 보내기</a>
+    <a class="btn btn-success btn-sm" href="/message/register">새 메세지 보내기</a>
+    </form>
   </div>
+  <script>
+    document.querySelectorAll("#messageReply").forEach(button => {
+      button.addEventListener('click', ()=> {
+        // 클릭된 답장 버튼이 속한 행
+        const row = event.target.closest('tr');
+        // 답장 버튼을 클릭한 후 버튼을 수정
+        const replyButton = row.querySelector("#messageReply");
+
+        // 현재 행의 작성자 정보를 가져옴
+        const messageWriter = row.getAttribute('data-writer');
+        console.log("messageWriter : ", messageWriter);
+
+        // 이미 존재하는 답장 영역을 찾기
+        let replyRow = row.nextElementSibling;
+
+        // 답장 영역이 이미 열려있다면 닫기
+        if (replyRow && replyRow.classList.contains('reply-row')) {
+          replyRow.remove();
+          // 버튼을 '답장'으로 다시 변경
+          replyButton.textContent = "답장";
+        } else {
+          // 답장 영역을 생성
+          const replyContent = document.createElement('tr');
+          replyContent.classList.add('reply-row');
+
+          const replyCell = document.createElement('td');
+          replyCell.setAttribute('colspan', '4'); // 4개의 열을 합쳐서 답장 영역을 만든다.
+
+          // 답장 폼 영역 생성 (아코디언 없이 바로 표시)
+          const replyForm = document.createElement('div');
+          replyForm.innerHTML = `
+
+              <div class="form-group">
+                <input type="hidden" name="receiver" id="r" value="${messageWriter}">
+
+                <textarea class="form-control" name="content" id="replyTextarea" rows="4" placeholder="답장을 작성하세요"></textarea>
+                <button class="btn btn-success btn-sm mt-2">답장 전송</button>
+              </div>
+
+          `;
+
+          replyCell.appendChild(replyForm);
+          replyContent.appendChild(replyCell);
+          row.parentNode.insertBefore(replyContent, row.nextElementSibling);
+
+          // 버튼을 '닫기'로 변경
+          replyButton.textContent = "닫기";
+        }
+      });
+    });
+
+
+  </script>
 </div>

@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
@@ -32,7 +33,13 @@ public class MessageController {
 
     @GetMapping("/list")
     public void list(Principal principal, Model model){
-        model.addAttribute("messageDTO", messageService.selectEmail(principal.getName()));
+        model.addAttribute("messageDTO", messageService.getList(principal.getName()));
+    }
+
+    @GetMapping("/delete")
+    public String delete(@RequestParam("mno") Long mno){
+        messageService.delete(mno);
+        return "redirect:/message/list";
     }
 
 

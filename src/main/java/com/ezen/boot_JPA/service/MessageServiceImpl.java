@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -21,15 +23,22 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public MessageDTO selectEmail(String name) {
-        List<Message> messageList = messageRepository.findByReceiver(name);
+    public List<MessageDTO> getList(String name) {
+        List<Message> messageList = messageRepository.findByReceiverOrderByRegisterAtDesc(name);
         if (!messageList.isEmpty()) {
-            // 첫 번째 메시지를 DTO로 변환
-            MessageDTO messageDTO = convertEntityToDto(messageList.get(0));
-            return messageDTO;
+            // 메시지 리스트를 DTO 리스트로 변환
+            List<MessageDTO> messageDTOList = messageList.stream()
+                    .map(this::convertEntityToDto)  // Message 객체를 MessageDTO 객체로 변환
+                    .collect(Collectors.toList());  // 리스트로 모음
+            return messageDTOList;  // 반환 타입이 List<MessageDTO>로 변경됨
         } else {
-            // 리스트가 비어있을 경우 처리할 로직
-            return null;  // 메시지가 없을 때
+            return Collections.emptyList();  // 메시지가 없으면 빈 리스트 반환
         }
     }
+
+    @Override
+    public void delete(Long mno) {
+        messageRepository.deleteById(mno);
+    }
+
 }
